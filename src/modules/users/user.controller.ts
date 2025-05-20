@@ -13,27 +13,36 @@ import { UserService } from './user.service';
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+
   @Get('/:username')
   getUser(@Param('username') username: string) {
     return this.userService.getUser(username);
   }
 
-  @Post('/users')
+  @Post()
   createUser(
     @Body() body: { username: string; email: string; password: string },
   ) {
     return this.userService.createUser(body);
   }
 
-  @Patch('/users/:username')
+  @Patch('/:username')
   updateUser(
+    @Param('username') username: string,
     @Body() body: { username: string; email: string; password: string },
   ) {
-    return this.userService.updateUser(body);
+    return this.userService.updateUser(username, body);
   }
 
-  @Delete('/users/:username')
-  deleteUser(@Param('username') username: string) {
-    return this.userService.deleteUser(username);
+  @Delete('/:username')
+  deleteUser(
+    @Param('username') username: string,
+    @Body('password') password: string,
+  ) {
+    return this.userService.deleteUser(username, password);
   }
 }
