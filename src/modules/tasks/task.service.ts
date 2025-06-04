@@ -54,9 +54,14 @@ export class TasksService {
     return this.taskRepository.save(task);
   }
 
-  async remove(id: number): Promise<{ message: string }> {
-    const task = await this.findOne(id); // this throws NotFoundException if not found
-    await this.taskRepository.remove(task);
-    return { message: `Task ${id} has removed successfully!` };
+  // async remove(id: number): Promise<{ message: string }> {
+  //   const task = await this.findOne(id); // this throws NotFoundException if not found
+  //   await this.taskRepository.remove(task);
+  //   return { message: `Task ${id} has removed successfully!` };
+  // }
+
+  clearAll() {
+    return this.taskRepository.clear();
+
   }
 }

@@ -1,23 +1,30 @@
-import { Module } from '@nestjs/common';
-
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './modules/users/user.module';
-import { TasksModule } from './modules/tasks/task.module';
+
+import { UserModule } from './modules/user/user.module';
+import { TaskModule } from './modules/task/task.module';
+
+import { User } from './users/user.entity';
+import { Task } from './tasks/task.entity';
+
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
   imports: [
-    UserModule,
-    TasksModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'todo.sqlite',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      entities: [User, Task],
+      synchronize: true, // ⚠️ Use ONLY during development
     }),
+    UserModule,
+    TaskModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('*'); // Apply middleware to all routes
+  }
+}
