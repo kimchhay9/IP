@@ -1,0 +1,60 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type BookingType {
+  end_date: DateTime!
+  hotel: HotelType!
+  hotel_id: Int!
+  id: Int!
+  is_checked_in: Boolean!
+  price: Float!
+  start_date: DateTime!
+}
+
+input CreateBookingInput {
+  end_date: DateTime!
+  hotel_id: Int!
+  price: Float!
+  start_date: DateTime!
+}
+
+input CreateHotelInput {
+  address: String!
+  name: String!
+  phone: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type HotelType {
+  address: String!
+  bookings: [BookingType!]
+  id: Int!
+  name: String!
+  phone: String!
+}
+
+type Mutation {
+  bookHotel(createBookingInput: CreateBookingInput!): BookingType!
+  cancelBooking(id: Int!): Boolean!
+  checkIn(id: Int!): BookingType!
+  createHotel(createHotelInput: CreateHotelInput!): HotelType!
+  deleteHotel(id: Int!): Boolean!
+  updateHotel(updateHotelInput: UpdateHotelInput!): HotelType!
+}
+
+type Query {
+  bookingsByDateRange1(end_date: DateTime!, start_date: DateTime!): [BookingType!]!
+  hotels(id: Int): [HotelType!]!
+}
+
+input UpdateHotelInput {
+  address: String
+  id: Int!
+  name: String
+  phone: String
+}
